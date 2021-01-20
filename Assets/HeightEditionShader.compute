@@ -1,0 +1,17 @@
+﻿#pragma kernel CalculateImage
+#include "UnityCG.cginc"
+
+
+RWTexture2D<half4> Image;
+Texture2D<half4> Image2D;
+Texture2D<half4> ImageMask;
+
+
+[numthreads(32,32,1)]
+void CalculateImage(uint3 id : SV_DispatchThreadID)
+{
+    half4 ImageValues = Image[id.xy];
+    half4 MaskValues = ImageMask[id.xy];
+    half4 Image2DValues = Image2D[id.xy];
+    Image[id.xy] = Image2DValues+(MaskValues/100);  
+}
